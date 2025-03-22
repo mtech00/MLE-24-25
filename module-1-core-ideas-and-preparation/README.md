@@ -10,6 +10,8 @@ ran "sudo usermod -aG docker $USER" to allow Docker usage without sudo.
 
 https://github.com/mtech00/MLE-24-25
 
+added to : https://github.com/mtech00/MLE-24-25/blob/main/module-1-core-ideas-and-preparation/README.md
+
 question : If it's okay with mentor allowance, I'd like to use these virtualization tools:
 
 WSL2 on Windows x86
