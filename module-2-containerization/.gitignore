@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Env & logs
+.env
+.venv/
+env/
+venv/
+*.env
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Data & models
+#data/
+*.h5
+*.pt
+*.ckpt
+#*.csv
+
+# Build artifacts
+*.whl
+
+# Editor
+.vscode/

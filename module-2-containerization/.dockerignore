@@ -1,0 +1,44 @@
+# Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.whl
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Virtual environments
+env/
+venv/
+.venv/
+
+# Data and models
+data/
+*.csv
+*.json
+*.pkl
+*.h5
+*.pt
+
+# Logs and temp files
+*.log
+*.tmp
+*.out
+
+# Secrets
+*.env
+
+# Git and Docker
+.git/
+.dockerignore
+.gitignore
+Dockerfile
+
+# IDE/editor
+.vscode/
+.idea/
+
+# Docs
+*.md

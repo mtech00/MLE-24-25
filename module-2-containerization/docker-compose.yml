@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        USER_UID: ${USER_UID}
+        USER_GID: ${USER_GID}
+    image: disaster-tweets-cpu
+    ports:
+      - "127.0.0.1:8888:8888"
+    volumes:
+      - ./data:/app/data
+    stdin_open: true
+    tty: true
