@@ -1,8 +1,13 @@
-#  DOCKER-BASED ML ENVIRONMENT 
+
+#   Containerized MLE Environment with Docker, TensorFlow, and Jupyter
+
+<p align="center">
+  <img src="figures/tux.png" alt="Tux">
+</p>
 
 ## 1. Overview
 
-This project provides a Dockerized development environment for experimenting with an existing dataset and a pretrained model. It uses **Python 3.9**, **TensorFlow**, and **Jupyter notebooks**, ensuring collaborators can reproduce experiments without cumbersome local installations.
+This project provides a Dockerized development environment for experimenting with an existing dataset and a pretrained model(**TinyBERT**). It uses **Python 3.9**, **TensorFlow**,**KerasNLP**,**KerasCore**, and **Jupyter notebooks**, ensuring collaborators can reproduce experiments without cumbersome local installations.
 
 ---
 
@@ -13,7 +18,7 @@ This project provides a Dockerized development environment for experimenting wit
 - **Set up a development environment** that allows others to work with the chosen dataset or problem.
 - **Follow best practices** in Docker usage.
 - **Provide a sufficient development environment** for effective iteration (version control, environment variables, environment management).
-- **Main task**: Ensure correct permissions on mounted data.
+- **Main task***: Ensure correct permissions on mounted data.
 
 ---
 
@@ -57,7 +62,8 @@ module-2-containerization/
   ├── data/                 # normally gitignored, but included here with a small test dataset for this guide. It’s a local data directory.
   ├── notebooks/            # Keras NLP starter notebook
   ├── .dockerignore         # Keep your Docker build context small and efficient, excluding unnecessary files from build
-  └── .gitignore            # Exclude large files, secret credentials, cache files, checkpoints, etc
+  ├── .gitignore            # Exclude large files, secret credentials, cache files, checkpoints, etc
+  └── docker-compose.yml    # YAML configuration file for Docker Management
 ```
 
 ---
@@ -73,7 +79,7 @@ First, clone the repository:
 
 ```bash
 git clone https://github.com/mtech00/MLE-24-25.git
-cd MLE-24-25/main/module-2-containerization
+cd MLE-24-25/module-2-containerization
 ```
 
 We create a blueprint for our Docker images in the form of a **Dockerfile**, which helps build the base system image from which you can deploy any number of containers.
@@ -111,11 +117,11 @@ Now, you can access the application via [http://127.0.0.1:8888](http://127.0.0.1
 
 ## 8. Choosing the Base Image
 
-Many Docker containers start with lightweight Linux distributions to minimize overhead. However, even base Linux images can still contain unnecessary packages and become oversized. Docker’s main advantage is the ability to build precisely what you need, layer by layer. While you could start with a minimal Linux base like Alpine and install Python yourself, that approach can become cumbersome—especially if you rely on large libraries like TensorFlow.
+Many Docker containers start with lightweight Linux distributions to minimize overhead. However, even base Linux images can still contain unnecessary packages and become oversized. Docker’s main advantage is the ability to build precisely what you need, layer by layer. While you could start with a minimal Linux base like Alpine and install Python yourself, that approach can become cumbersome—especially if you rely on large libraries like TensorFlow. if we dont need especially even smaller base image  for extremely resource-limited environments (e.g., IoT devices), that goes beyond our current scope.
 
-For this project, we’ll use a **Python-based** image optimized for Python applications. Since we’re working on a data science–oriented project with Python notebooks, choosing a Python image is both practical and efficient. While an even smaller base image might work for extremely resource-limited environments (e.g., IoT devices), that goes beyond our current scope.
+For this project, we’ll use a **Python-based** image optimized for Python applications. Since we’re working on a data science–oriented project with Python notebooks, choosing a Python image is both practical and efficient.
 
-Because we want stability and broad compatibility with existing libraries, we’re staying on **Python 3.9** instead of the newest 3.14. This approach avoids library compatibility issues. We also select the **slim** variant to keep the image smaller.
+We did not use latest one ,Because we want stability and broad compatibility with existing libraries, we’re staying on **Python 3.9** instead of the newest 3.13. This approach avoids library compatibility issues. We also select the **slim** variant to keep the image even smaller ,without uncessary development tools for this project  (`gcc`, `make`, `g++ etc.`).
 
 Why?
 
@@ -123,7 +129,7 @@ Why?
 - **Compatibility**: Python 3.9 is supported by popular data science libraries.
 - **Ease of Use**: Debian- or Ubuntu-based images simplify installing large libraries like TensorFlow.
 
-Since we want the **exact** same base (not 3.9.1 or 3.9.5) each time, we pin it with a SHA256 digest:
+Since we want the **exact** same base (not 3.9.1 or 3.9.5 ,any other variant ) each time, we pin it with a SHA256 digest:
 
 ```
 # ======= STAGE 1: Builder =======
@@ -131,29 +137,29 @@ ARG IMAGE=python:3.9-slim@sha256:e52ca5f579cc58...
 FROM ${IMAGE} AS builder
 ```
 
-This ensures we always pull the same layer, avoiding unexpected changes or vulnerabilities if the `python:3.9-slim` tag updates. You can see potential vulnerabilities and image details on [Docker Hub](https://hub.docker.com/_/python) before selecting a pinned version.
+This ensures we always pull the same layer, avoiding unexpected changes or vulnerabilities if the `python:3.9-slim` tag updates. You can see potential vulnerabilities and image details on [Docker Hub:3.9-slim/images/sha256-f5ad67bdf5***](https://hub.docker.com/layers/library/python/3.9-slim/images/sha256-f5ad67bdf5028207c434bd608afe1b6605c2a2f991e62f562eaa55a092732a55) before selecting a pinned version.
 
 ---
 
 ## 9. Multi-Stage Docker Builds
 
-We’ll create the first stage of our build—known as a multi-stage build. Because Docker constructs images layer by layer, unnecessary components from earlier layers can inflate the final image. Multi-stage builds allow you to copy only what you need from one stage to the next, resulting in a cleaner, more minimal final image.
+We’ll create the first stage of our build—known as a multi-stage build. Because Docker constructs images layer by layer, unnecessary components from earlier layers can extend the final image. Multi-stage builds allow you to copy only what you need from one stage to the next, resulting in a cleaner, more minimal final image.
 
 For example, if you install Git and other build tools in a “builder” stage but don’t need them at runtime, you can just copy the compiled artifacts to the final stage, leaving behind unneeded dependencies.
 
 ### Example Steps
 
-1. **Builder Stage**: Install libraries, upgrade pip, and compile or download resources.
+1. **Builder Stage**: Install libraries, upgrade pip, and compile or download resources. In our project, we did not install any packages via apt-get, but if we had, cleaning up afterwards would be a good practice for a cleaner build.
 
    ```bash
-   #RUN apt-get update && \
+   # RUN apt-get update && \
    #       apt-get clean && \
    #       rm -rf /var/lib/apt/lists/*
    ```
 
-2. **Final Stage**: Start from the same base image (or a minimal image) and copy only what’s necessary.
+2. **Final Stage**: Start from the same base image (or a minimal image what you need , same image will be recommended ) and copy only what’s necessary.
 
----
+
 
 ## 10. Installing Dependencies
 
@@ -219,7 +225,7 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} \
     && useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME}
 ```
 
-We then copy only what’s needed from the builder:
+We then copy only what’s needed from the builder layer:
 
 ```
 COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
@@ -233,14 +239,14 @@ Set the working directory:
 WORKDIR /app
 ```
 
-Add notebooks:  We’re baking the main notebooks into the image for convenience (instead of relying on users to mount them). This can vary per project, but in this case we also need to ensure proper permissions for the working directory so the non-root user can access and modify files:
+Add notebooks:  We’re baking the main notebooks into the image for convenience (instead of relying on users to mount them). This can vary per project, in this case we also need to ensure proper permissions for the working directory so the non-root user can access and modify files:
 
 ```
 COPY notebooks/ /app/notebooks/
 RUN chown -R ${USERNAME}:${USERNAME} /app
 ```
 
-Expose port 8888 and run Jupyter:
+Expose port 8888 and run Jupyter: This is a run-time command, not a build-time one. The script runs whenever the container starts—no auto-start setup or browser credentials are created; it simply starts the server.
 
 ```
 EXPOSE 8888
@@ -269,7 +275,7 @@ docker build \
 ```
 
 - `-t disaster-tweets-cpu` tags the image.
-- `--build-arg USER_UID=$(id -u)` aligns container user ID with your local user.
+- `--build-arg USER_UID=$(id -u)` ,`--build-arg USER_GID=$(id -g)` aligns container user ID and group ID with your local user.
 
 Optional flags:
 
@@ -278,7 +284,7 @@ Optional flags:
 
 x86 is not the de-facto standard anymore. Many servers and laptops (like Apple Silicon) use ARM architecture. Some old libraries or images support only x86, but today that’s rarely a problem, especially when using Docker Desktop, which handles architecture automatically.
 
----
+
 
 ## 13. Creating a Container
 
@@ -291,9 +297,9 @@ docker run --rm -it \
     disaster-tweets
 ```
 
-- `--rm`: Removes the container after it exits.
+- `--rm`: Removes the container after it stops.
 
-- `-it`: Interactive mode to view logs.
+- `-it`: Interactive mode to view logs , foreground running rather than background.
 
 - `-p 127.0.0.1:8888:8888`: Binds Jupyter to localhost (not public).
 
@@ -315,7 +321,7 @@ docker run --rm -it \
   Even with `127.0.0.1`, Docker's network model may allow **other containers or hosts on the same Layer 2 (L2) segment** to access it, depending on the setup.
 
   See:
-  - [Docker security doc](https://docs.docker.com/engine/network/)
+  - [Docker security doc - published-ports](https://docs.docker.com/engine/network/#published-ports)
   - [Moby issue #45610](https://github.com/moby/moby/issues/45610)
 
   ### Secure Example:
@@ -375,11 +381,12 @@ docker run --rm -it \
 
 ## 14. Docker Compose
 
-Docker Compose simplifies multi-container setups. Here’s a basicFor advanced projects, Docker Compose can simplify multi-container setups or integrate additional services\
+Docker Compose simplifies multi-container setups. Here’s a basic For advanced projects, Docker Compose can simplify multi-container setups or integrate additional services 
 
-`Docker Compose can be used in simpler projects, but in more advanced ones, we must tackle complexity. We might use Kubernetes or other management tools, which often require YAML configurations. Docker Compose helps us with multi-container environments, simplified configurations, and more. Here's an example : [https://docs.docker.com/compose/intro/compose-application-model/docker-compose.ymlversion`\](https://docs.docker.com/compose/intro/compose-application-model/docker-compose.ymlversion`\)
+`Docker Compose can be used in simpler projects, but in more advanced ones, we must tackle complexity. We might use Kubernetes or other management tools, which often require YAML configurations. Docker Compose helps us with multi-container environments, simplified configurations, and more. Here's an example : [docs.docker.com - compose-application-model](https://docs.docker.com/compose/intro/compose-application-model/#illustrative-example)
 
-`docker-compose.yml `docker-compose.yml`:
+
+`docker-compose.yml `:
 
 ```yaml
 version: '3.8'
@@ -418,7 +425,6 @@ Instead, use SSH port forwarding to access it securely from your local machine:
 
 
 ```
-
 ssh -L 8888:localhost:8888 user@your_server_ip
 ```
  What this does:
@@ -511,7 +517,7 @@ This excludes Python caches, Jupyter checkpoints, local data, environment files,
 ## 17. Testing on Different Environments
 
 - Works on ARM-based  and x86 (Intel/AMD) servers (e.g., Hetzner).
-- Adjusting `USER_UID` and `USER_GID` ensures correct permissions on mounted data.
+- Adjusting different`USER_UID` and `USER_GID` ensures correct permissions on mounted data.
 - Also tested on local Linux VMs with different user IDs and group IDs.
 
 ---
@@ -588,3 +594,5 @@ Containerization significantly reduces environment configuration overhead, enabl
 - [Kaggle - Disaster Tweets Dataset](https://www.kaggle.com/competitions/nlp-getting-started)
 - https://docs.docker.com/engine/network/
 - https://github.com/moby/moby/issues/45610
+-  [Docker security doc - published-ports](https://docs.docker.com/engine/network/#published-ports)
+- [docs.docker.com - compose-application-model](https://docs.docker.com/compose/intro/compose-application-model/#illustrative-example)
