@@ -7,7 +7,7 @@ services:
       args:
         USER_UID: ${USER_UID}
         USER_GID: ${USER_GID}
-    image: disaster-tweets-cpu
+    image: disaster-tweets
     ports:
       - "127.0.0.1:8888:8888"
     volumes:
