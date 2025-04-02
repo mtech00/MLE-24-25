@@ -274,7 +274,7 @@ docker build \
     -t disaster-tweets .
 ```
 
-- `-t disaster-tweets-cpu` tags the image.
+- `-t disaster-tweets` tags the image.
 - `--build-arg USER_UID=$(id -u)` ,`--build-arg USER_GID=$(id -g)` aligns container user ID and group ID with your local user.
 
 Optional flags:
@@ -397,7 +397,7 @@ services:
       args:
         USER_UID: ${USER_UID}
         USER_GID: ${USER_GID}
-    image: disaster-tweets-cpu
+    image: disaster-tweets
     ports:
       - "127.0.0.1:8888:8888"
     volumes:
