@@ -356,7 +356,6 @@ In our project, we did not apply this but it's absolutely worth mentioning. Sign
 ## Architecture
 
 
-## Architecture
 
 ### Artifact Storage on the Host File System
 
