@@ -66,10 +66,7 @@ project_root/
 └── create_report.py                    # Report generation script
 
 
-```
-
-This structure illustrates how the project separates concerns between experiment execution, tracking, artifact storage, model registry, and reporting - all key aspects of a comprehensive MLFlow implementation.
-
+``` 
 ## MLFlow: What Should Be Done
 
 ## Tasks
