@@ -2,7 +2,7 @@
 
 
 # IMPORTANT! Set the ABSOLUTE path to your virtual environment's activation script
-VENV_PATH="$HOME/model_deployment/venv/bin/activate" # UPDATE THIS 
+VENV_PATH="$HOME/MLE-24-25/module-5-model-deployment/venv/bin/activate" # UPDATE THIS 
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
