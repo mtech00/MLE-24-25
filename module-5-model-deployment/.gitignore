@@ -9,7 +9,7 @@ venv/
 # Data files
 !data/input_batch_iris.csv
 data/*.csv
-
+tests/test_data/*
 
 # Pytest Caches
 .pytest_cache
