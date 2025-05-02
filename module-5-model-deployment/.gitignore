@@ -18,7 +18,7 @@ data/*.csv
 artifacts/*.pkl
 
 # Logs
-logs/
+logs/*
 
 # OS 
 .DS_Store
