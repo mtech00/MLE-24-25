@@ -115,7 +115,8 @@ def save_results(df_original_input, predictions, output_path):
     """Saves the original input data along with predictions."""
     if df_original_input.empty:
         print("BATCH: No data to save (input was empty).")
-        # Optionally create an empty file         try:
+        # Optionally create an empty file         
+        try:
             output_dir = os.path.dirname(output_path)
             if output_dir and not os.path.exists(output_dir):
                 os.makedirs(output_dir)
