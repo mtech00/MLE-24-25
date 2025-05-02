@@ -1,0 +1,29 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual envs
+venv/
+.venv/
+
+# Data files
+data/*.csv
+!data/iris_test_input.csv
+
+# Pytest Caches
+.pytest_cache
+.coverage
+
+# Model artifacts
+artifacts/*.pkl
+
+# Logs
+logs/
+
+# OS 
+.DS_Store
+
+
+# Docker
+*.log
+*.pid
