@@ -2,6 +2,9 @@
 __pycache__/
 *.pyc
 
+# build files
+dist/*
+
 # Virtual envs
 venv/
 .venv/
