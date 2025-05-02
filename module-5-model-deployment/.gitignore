@@ -7,8 +7,9 @@ venv/
 .venv/
 
 # Data files
+!data/input_batch_iris.csv
 data/*.csv
-!data/iris_test_input.csv
+
 
 # Pytest Caches
 .pytest_cache
