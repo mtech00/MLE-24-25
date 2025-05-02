@@ -19,7 +19,7 @@ COPY ./src /app/src
 # Copy artifacts 
 COPY ./artifacts /app/artifacts
 
-# --- Configure Flask Environment ---
+
 # Points to the Flask app instance 'app' within the 'api.py' module
 # inside the 'iris_predictor' package.
 ENV FLASK_APP=src.iris_predictor.api:app
