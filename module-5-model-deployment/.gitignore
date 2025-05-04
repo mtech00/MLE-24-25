@@ -10,18 +10,22 @@ venv/
 .venv/
 
 # Data files
-!data/input_batch_iris.csv
+
 data/*.csv
+!data/input_batch_iris.csv
+
 tests/test_data/*
 
 # Pytest Caches
 .pytest_cache
 .coverage
+htmlcov/
 
 # Model artifacts
 artifacts/*.pkl
 
 # Logs
+!logs/.gitkeep
 logs/*
 
 # OS 
