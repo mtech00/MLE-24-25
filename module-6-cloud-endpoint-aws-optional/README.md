@@ -1,5 +1,5 @@
 
-# Deploying ML Models with AWS SageMaker: A Comprehensive Guide
+# Deploying ML Models with AWS SageMaker
 
 
 <p align="center">
