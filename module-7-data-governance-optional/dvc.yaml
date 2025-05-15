@@ -1,0 +1,24 @@
+stages:
+  prepare:
+    cmd: python prepare.py data/wine.csv data
+    deps:
+      - data/wine.csv
+      - prepare.py
+    params:
+      - data.test_size
+      - data.random_state
+    outs:
+      - data/train.csv
+      - data/test.csv
+
+  train:
+    cmd: python train.py data/train.csv data/test.csv metrics/metrics.json
+    deps:
+      - data/train.csv
+      - data/test.csv
+      - train.py
+    params:
+      - model
+    metrics:
+      - metrics/metrics.json:
+          cache: false

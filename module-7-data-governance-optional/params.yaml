@@ -1,0 +1,16 @@
+data:
+  test_size: 0.2
+  random_state: 42
+
+model:
+  type: forest  # Options: linear, forest
+  random_state: 42
+
+  # Linear regression parameters
+  linear:
+    fit_intercept: true
+
+  # Random forest parameters
+  forest:
+    n_estimators: 200
+    max_depth: 10
