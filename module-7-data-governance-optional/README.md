@@ -136,8 +136,6 @@ pip install 'dvc[s3]'
 # Configure an S3 remote
 dvc remote add -d storage s3://your-bucket-name/dvc-store
 
-
-
 # specify the region or endpoint
 dvc remote modify storage endpointurl https://s3.your-region.amazonaws.com
 
@@ -381,8 +379,7 @@ DVC gives us the best of both worlds: code is stored in Git, and data is stored 
 Now let's see our pipeline:
 
 ```
-dvc-learn on  main [$!?] via 🐍 v3.8.20 (genelvenv)
-❯ dvc dag
+dvc dag
 +-------------------+
 | data/wine.csv.dvc |
 +-------------------+
@@ -398,8 +395,6 @@ dvc-learn on  main [$!?] via 🐍 v3.8.20 (genelvenv)
       +-------+
       | train |
       +-------+
-
-dvc-learn on  main [$!?] via 🐍 v3.8.20 (genelvenv)
 ```
 
 ```bash
@@ -462,7 +457,7 @@ Let's compare our experiments:
 ```bash
 # Show all experiments
 dvc exp show
-✦ ❯ cat experiments.md
+cat experiments.md
 | Experiment                      | Created   | rmse    | r2      | data.test_size   | data.random_state   | model.type   | model.random_state   | model.linear.fit_intercept   | model.forest.n_estimators   | model.forest.max_depth   | data/test.csv                    | data/train.csv                   | data/wine.csv                    | prepare.py                       | train.py                         |
 |---------------------------------|-----------|---------|---------|------------------|---------------------|--------------|----------------------|------------------------------|-----------------------------|--------------------------|----------------------------------|----------------------------------|----------------------------------|----------------------------------|----------------------------------|
 | workspace                       | -         | 0.54638 | 0.49609 | 0.2              | 42                  | forest       | 42                   | True                         | 200                         | 10                       | 6ca2653520d012ad65c90330caffa2ef | df39ae4971ce8726b1e4f00c966aca82 | f891011583869947c457be754358f18e | 02fb85bd8e91ae6760f4b9c211c809f5 | d12c040b171abfccd86525f8cc694520 |
@@ -481,8 +476,6 @@ metrics/metrics.json  rmse      0.58123   0.57996              -0.001267
 
 Path         Param                      forest    forest_more_trees    Change
 params.yaml  model.forest.n_estimators  100       200                  100
-
-dvc-learn on  main [!?] via 🐍 v3.8.20 (genelvenv)
 ```
 If you find an experiment that works well, you can apply it to your workspace! This part will be edited - the default attribute of experiments is apply, so before trusting this, double check:
 
@@ -619,7 +612,6 @@ Additional: if you depend on multiple files, you can check: Dependency Checkout:
 
 ```
 dvc checkout --with-deps <target>
-
 ```
 
 https://dvc.org/doc/command-reference/checkout#-d
@@ -763,7 +755,7 @@ By combining Git for code versioning and DVC for data versioning, you can create
 
 ## Going Further
 
-To continue your DVC journey, consider exploring:
+To continue DVC journey, consider exploring:
 
 -   **DVC Studio**: A web interface for visualizing and managing experiments
 -   **DVC with CI/CD**: Integrate DVC into your continuous integration workflows
